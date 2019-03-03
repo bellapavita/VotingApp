@@ -1,0 +1,43 @@
+<mat-card>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <form (submit)="onSavePoll(pollForm)" #pollForm="ngForm" *ngIf="!isLoading">
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        name="title"
+        [ngModel]="poll?.title"
+        required
+        minlength="3"
+        placeholder="Poll Title"
+        #title="ngModel">
+      <mat-error *ngIf="title.invalid">Please enter a poll title.</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <textarea
+        matInput
+        rows="1"
+        name="option1"
+        [ngModel]="poll?.option1"
+        required
+        placeholder="Option 1"
+        #option="ngModel"></textarea>
+      <mat-error *ngIf="option.invalid">Please enter an option</mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <textarea
+        matInput
+        rows="1"
+        name="option2"
+        [ngModel]="poll?.option2"
+        required
+        placeholder="Option 2"
+        #option="ngModel"></textarea>
+      <mat-error *ngIf="option.invalid">Please enter an option</mat-error>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit">Save Poll</button>
+  </form>
+</mat-card>
