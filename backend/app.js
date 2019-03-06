@@ -3,7 +3,6 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const pollsRoutes = require("./routes/polls");
-const clientsRoutes = require("./routes/clients");
 
 const app = express();
 
@@ -35,7 +34,44 @@ app.use((req, res, next) => {
   next();
 });
 
+initiateMultichain = function() {
+  // Change password, located in /root/.multichain/medium-demo-multichain/multichain.conf
+  var multichain = require("multichain-node")({
+    port: 6759,
+    host: '68.183.19.8',
+    user: "multichainrpc",
+    pass: "35SWEGR9B8pGzndsqv3nf1tqZxMXxoD4sKVnZoNSQu6D"
+  });
+  return multichain;
+}
+
+app.get("/", function (request, response) {
+  response.json({message: 'works'});
+});
+
+app.post("/publish", function (request, response) {
+  var multichain = initiateMultichain();
+  var title = request.body.title;
+  var body = request.body.body;
+
+multichain.publish({
+  stream: 'root',
+  key: 'Medium demo',
+  data:{
+    "json":
+    {
+    'title' : title,
+    'body' : body
+    }
+  }
+  }, (err, info) => {
+  console.log('Response: '+info);
+  response.json({transactionId: info});
+  })
+});
+
+app.listen(3500, () => console.log('Server is up and running'))
+
 app.use("/api/polls", pollsRoutes);
-app.use("/api/clients", clientsRoutes);
 
 module.exports = app;
