@@ -4,10 +4,29 @@
     <mat-expansion-panel-header>
       {{ poll.title }}
     </mat-expansion-panel-header>
-    <p><mat-radio-button>{{ poll.option1 }}</mat-radio-button></p>
-    <p><mat-radio-button>{{ poll.option2 }}</mat-radio-button></p>
+
+    <div>
+    <table>
+      <tr>
+        <td>{{ poll.option1 }}</td>
+        <td>{{ poll.value1 }}</td>
+      </tr>
+      <br>
+      <tr>
+        <td>{{ poll.option2 }}</td>
+        <td>{{ poll.value2 }}</td>
+      </tr>
+    </table>
+    </div>
+    <br>
+    <mat-radio-group [(ngModel)]="optionPick">
+      <mat-radio-button value="1">{{ poll.option1 }}</mat-radio-button>
+      <br><br>
+      <mat-radio-button value="2">{{ poll.option2 }}</mat-radio-button>
+    </mat-radio-group>
+
     <mat-action-row>
-      <a mat-button color="primary" [routerLink]="['/vote', poll.id]">VOTE</a>
+      <a mat-button color="primary" [routerLink]="['/vote', poll.id, optionPick]">VOTE</a>
       <a mat-button color="primary" [routerLink]="['/edit', poll.id]">EDIT</a>
       <button mat-button color="warn" (click)="onDelete(poll.id)">DELETE</button>
     </mat-action-row>

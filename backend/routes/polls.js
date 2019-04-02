@@ -8,13 +8,60 @@ router.post("", (req, res, next) => {
   const poll = new Poll({
     title: req.body.title,
     option1: req.body.option1,
-    option2: req.body.option2
+    option2: req.body.option2,
+    value1: req.body.value1,
+    value2: req.body.value2
+    //address1:
+    //address2:
   });
+
   poll.save().then(createdPoll => {
     res.status(201).json({
       message: "Poll added successfully",
       pollId: createdPoll._id
     });
+  });
+
+  let multichain = require("multichain-node")({
+    port: 6270,
+    host: '68.183.19.8',
+    user: "multichainrpc",
+    pass: "FF2jPhLCVZiDjr6LZewJp4eA7JJVqcnrsK6PgHvCADG7" //chain1
+  });
+
+  multichain.getnewaddress(
+    (err, res) => {
+      console.log(res)
+  })
+
+  multichain.issue({address: someAddress, asset: "zcoin", qty: 50000, units: 0.01, details: {hello: "world"}},
+    (err, res) => {
+      console.log(res)
+  })
+});
+
+router.patch('/vote/:id/:optionPick', (req, res, next) => {
+  const firstValue = 0;
+  const secondValue = 0;
+
+  if (optionPick == 1) {
+    firstValue = 1;
+  }
+  if (optionPick == 2) {
+    secondValue = 1;
+  }
+
+  const poll = new Poll({
+    _id: req.body.id,
+    title: req.body.title,
+    option1: req.body.option1,
+    option2: req.body.option2,
+    value1: req.body.value1 + firstValue,
+    value2: req.body.value2 + secondValue
+  });
+
+  Poll.updateOne({ _id: req.params.id }, poll).then(res => {
+    res.status(200).json({ message: "Vote successful!" });
   });
 });
 

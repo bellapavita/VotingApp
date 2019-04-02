@@ -18,6 +18,7 @@ export class PollListComponent implements OnInit, OnDestroy {
   polls: Poll[] = [];
   isLoading = false;
   private pollsSub: Subscription;
+  optionPick = Number;
 
   constructor(public pollsService: PollsService) {}
 

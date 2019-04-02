@@ -18,13 +18,15 @@ import { PollCreateComponent } from "./polls/poll-create/poll-create.component";
 import { HeaderComponent } from "./header/header.component";
 import { PollListComponent } from "./polls/poll-list/poll-list.component";
 import { AppRoutingModule } from "./app-routing.module";
+import { InfoComponent } from './info/info.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PollCreateComponent,
     HeaderComponent,
-    PollListComponent
+    PollListComponent,
+    InfoComponent
   ],
   imports: [
     BrowserModule,

@@ -23,6 +23,8 @@ export class PollsService {
               title: poll.title,
               option1: poll.option1,
               option2: poll.option2,
+              value1: poll.value1,
+              value2: poll.value2,
               id: poll._id
             };
           });
@@ -39,13 +41,13 @@ export class PollsService {
   }
 
   getPoll(id: string) {
-    return this.http.get<{ _id: string; title: string; option1: string, option2: string }>(
+    return this.http.get<{ _id: string, title: string, option1: string, option2: string, value1: number, value2: number }>(
       "http://localhost:3000/api/polls/" + id
     );
   }
 
   addPoll(title: string, option1: string, option2: string) {
-    const poll: Poll = { id: null, title: title, option1: option1, option2: option2 };
+    const poll: Poll = { id: null, title: title, option1: option1, option2: option2, value1: 0, value2: 0};
     this.http
       .post<{ message: string; pollId: string }>(
         "http://localhost:3000/api/polls",
@@ -60,8 +62,21 @@ export class PollsService {
       });
   }
 
-  updatePoll(id: string, title: string, option1: string, option2: string) {
-    const poll: Poll = { id: id, title: title, option1: option1, option2: option2 };
+  votePoll(id, option) {
+    this.http
+    .post(`http://localhost:3000/api/polls` + id, option)
+    .subscribe((polls: Poll[]) => {
+      this.polls = polls;
+    });
+  }
+
+  updatePoll(id: string, title: string, option1: string, option2: string, value1: number, value2: number) {
+    const poll: Poll = { id: id,
+                         title: title,
+                         option1: option1,
+                         option2: option2,
+                         value1: value1,
+                         value2: value2 };
     this.http
       .put("http://localhost:3000/api/polls/" + id, poll)
       .subscribe(response => {

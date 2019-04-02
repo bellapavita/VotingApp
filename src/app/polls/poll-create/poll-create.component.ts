@@ -31,7 +31,14 @@ export class PollCreateComponent implements OnInit {
         this.isLoading = true;
         this.pollsService.getPoll(this.pollId).subscribe(pollData => {
           this.isLoading = false;
-          this.poll = {id: pollData._id, title: pollData.title, option1: pollData.option1, option2: pollData.option2};
+          this.poll = {
+                       id: pollData._id,
+                       title: pollData.title,
+                       option1: pollData.option1,
+                       option2: pollData.option2,
+                       value1: pollData.value1,
+                       value2: pollData.value2
+                      };
         });
       } else {
         this.mode = "create";
@@ -52,7 +59,9 @@ export class PollCreateComponent implements OnInit {
         this.pollId,
         form.value.title,
         form.value.option1,
-        form.value.option2
+        form.value.option2,
+        1,
+        1
       );
     }
     form.resetForm();
