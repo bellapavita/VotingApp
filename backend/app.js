@@ -35,6 +35,8 @@ app.use((req, res, next) => {
   next();
 });
 
+//start
+
 initiateMultichain = function() {
   // Change password, located in /root/.multichain/medium-demo-multichain/multichain.conf
   let multichain = require("multichain-node")({

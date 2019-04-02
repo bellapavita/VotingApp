@@ -5,14 +5,35 @@ const Poll = require("../models/poll");
 const router = express.Router();
 
 router.post("", (req, res, next) => {
+  let multichain = require("multichain-node")({
+    port: 6270,
+    host: '68.183.19.8',
+    user: "multichainrpc",
+    pass: "FF2jPhLCVZiDjr6LZewJp4eA7JJVqcnrsK6PgHvCADG7" //chain1
+  });
+
+  let newAddress = {};
+
+  multichain.getNewAddress((err, res) => {
+    if(err){
+        throw err;
+    }
+    console.log(res);
+    newAddress = res;
+  })
+
+  //multichain.issue({address: newAddress, asset: "zcoin", qty: 50000, units: 0.01, details: {hello: "world"}},
+  //  (err, res) => {
+  //    console.log(res)
+  //})
+
   const poll = new Poll({
     title: req.body.title,
+    address: newAddress,
     option1: req.body.option1,
     option2: req.body.option2,
     value1: req.body.value1,
     value2: req.body.value2
-    //address1:
-    //address2:
   });
 
   poll.save().then(createdPoll => {
@@ -21,23 +42,6 @@ router.post("", (req, res, next) => {
       pollId: createdPoll._id
     });
   });
-
-  let multichain = require("multichain-node")({
-    port: 6270,
-    host: '68.183.19.8',
-    user: "multichainrpc",
-    pass: "FF2jPhLCVZiDjr6LZewJp4eA7JJVqcnrsK6PgHvCADG7" //chain1
-  });
-
-  multichain.getnewaddress(
-    (err, res) => {
-      console.log(res)
-  })
-
-  multichain.issue({address: someAddress, asset: "zcoin", qty: 50000, units: 0.01, details: {hello: "world"}},
-    (err, res) => {
-      console.log(res)
-  })
 });
 
 router.patch('/vote/:id/:optionPick', (req, res, next) => {

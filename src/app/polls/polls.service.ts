@@ -47,7 +47,7 @@ export class PollsService {
   }
 
   addPoll(title: string, option1: string, option2: string) {
-    const poll: Poll = { id: null, title: title, option1: option1, option2: option2, value1: 0, value2: 0};
+    const poll: Poll = { id: null, title: title, address: "", option1: option1, option2: option2, value1: 0, value2: 0};
     this.http
       .post<{ message: string; pollId: string }>(
         "http://localhost:3000/api/polls",
@@ -73,6 +73,7 @@ export class PollsService {
   updatePoll(id: string, title: string, option1: string, option2: string, value1: number, value2: number) {
     const poll: Poll = { id: id,
                          title: title,
+                         address: "",
                          option1: option1,
                          option2: option2,
                          value1: value1,

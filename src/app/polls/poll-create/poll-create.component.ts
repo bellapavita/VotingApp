@@ -34,6 +34,7 @@ export class PollCreateComponent implements OnInit {
           this.poll = {
                        id: pollData._id,
                        title: pollData.title,
+                       address: "",
                        option1: pollData.option1,
                        option2: pollData.option2,
                        value1: pollData.value1,
