@@ -20,7 +20,7 @@ mongoose
   });
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -39,6 +39,7 @@ app.use((req, res, next) => {
 
 initiateMultichain = function() {
   // Change password, located in /root/.multichain/medium-demo-multichain/multichain.conf
+  console.log("tests");
   let multichain = require("multichain-node")({
     port: 6270,
     host: '68.183.19.8',
@@ -48,37 +49,11 @@ initiateMultichain = function() {
   return multichain;
 }
 
-app.get("/", function (request, response) {
-  response.json({message: 'works'});
-});
+//app.listen(3500, () => console.log('Server is up and running'))
 
-app.get("/publish", function (request, response) {
-  var multichain = initiateMultichain();
-
-  multichain.getInfo((err, info) => {
-    if(err){
-        throw err;
-    }
-    console.log(info);
-  })
-
-  multichain.publish({
-    stream: 'root',
-    key: 'bella2',
-    data: 'a1b2c3d4'
-  }, (err, info) => {
-      console.log('Response: ' + info);
-      if(err){
-        throw err;
-      }
-      response.json({transactionId: info});
-    }
-  )
-});
-
-app.listen(3500, () => console.log('Server is up and running'))
-
-app.use("/api/polls", pollsRoutes);
-app.use("/api/info", infoRoutes);
+//app.use("/api/polls", pollsRoutes);
+// app.use("/api/info", infoRoutes);
+require('./routes/info.js')(app)
+require('./routes/polls.js')(app)
 
 module.exports = app;

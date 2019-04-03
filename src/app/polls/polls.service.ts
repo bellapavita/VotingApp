@@ -15,7 +15,7 @@ export class PollsService {
 
   getPolls() {
     this.http
-      .get<{ message: string; polls: any }>("http://localhost:3000/api/polls")
+      .get<{ message: string; polls: any }>("http://localhost:3000/api/poll/find")
       .pipe(
         map(pollData => {
           return pollData.polls.map(poll => {
@@ -42,7 +42,7 @@ export class PollsService {
 
   getPoll(id: string) {
     return this.http.get<{ _id: string, title: string, option1: string, option2: string, value1: number, value2: number }>(
-      "http://localhost:3000/api/polls/" + id
+      "http://localhost:3000/api/polls/findById/" + id
     );
   }
 

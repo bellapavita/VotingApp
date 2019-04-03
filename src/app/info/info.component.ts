@@ -13,7 +13,10 @@ export class InfoComponent implements OnInit {
   public response;
 
   ngOnInit() {
-    this.infoService.getInfo();
+    this.infoService.getInfo().subscribe(data => {
+      console.log(data);
+      this.response = JSON.stringify(data);
+    });
   }
 
 }
