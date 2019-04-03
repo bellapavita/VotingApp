@@ -33,12 +33,9 @@ export class PollsService {
         "http://localhost:3000/api/poll/addPoll", poll);
   }
 
-  votePoll(id, option) {
-    this.http
-    .post(`http://localhost:3000/api/polls` + id, option)
-    .subscribe((polls: Poll[]) => {
-      this.polls = polls;
-    });
+  votePoll(pickValue: Object): Observable<any> {
+    return this.http.post(
+      `http://localhost:3000/api/poll/votePoll`, pickValue);
   }
 
   updatePoll(id: string, title: string, option1: string, option2: string, value1: number, value2: number) {

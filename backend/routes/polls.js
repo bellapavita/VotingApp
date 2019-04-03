@@ -45,9 +45,13 @@ module.exports = (app) => {
     });
   });
 
-  app.patch('/api/poll/vote/:id/:optionPick', (req, res, next) => {
-    const firstValue = 0;
-    const secondValue = 0;
+  app.post('/api/poll/votePoll/', (req, res, next) => {
+    console.log("Inside backend /votePoll and id " 
+      + req.body.poll._id + " picked option " + req.body.optionPick );
+    console.log(req.body);
+    var firstValue = 0;
+    var secondValue = 0;
+    const optionPick = req.body.optionPick
 
     if (optionPick == 1) {
       firstValue = 1;
@@ -55,18 +59,18 @@ module.exports = (app) => {
     if (optionPick == 2) {
       secondValue = 1;
     }
-
-    const poll = new Poll({
-      _id: req.body.id,
-      title: req.body.title,
-      option1: req.body.option1,
-      option2: req.body.option2,
-      value1: req.body.value1 + firstValue,
-      value2: req.body.value2 + secondValue
-    });
-
-    Poll.updateOne({ _id: req.params.id }, poll).then(res => {
-      res.status(200).json({ message: "Vote successful!" });
+    
+    Poll.findOneAndUpdate(req.body.poll._id, {
+      title: req.body.poll.title,
+      option1: req.body.poll.option1,
+      option2: req.body.poll.option2,
+      value1: req.body.poll.value1 + firstValue,
+      value2: req.body.poll.value2 + secondValue
+    }, {new: true}).then(data => {
+      res.status(200).send({ 
+        message: "Vote successful!",
+        result: data
+       });
     });
   });
 
@@ -78,7 +82,7 @@ module.exports = (app) => {
       option2: req.body.option2
     });
     Poll.updateOne({ _id: req.params.id }, poll).then(result => {
-      res.status(200).json({ message: "Update successful!" });
+      res.status(200).send({ message: "Update successful!" });
     });
   });
 
