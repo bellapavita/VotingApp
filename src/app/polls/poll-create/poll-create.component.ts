@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { NgForm } from "@angular/forms";
-import { ActivatedRoute, ParamMap } from "@angular/router";
+import { ActivatedRoute, ParamMap, Router } from "@angular/router";
 
 import { PollsService } from "../polls.service";
 import { Poll } from "../poll.model";
@@ -20,7 +20,8 @@ export class PollCreateComponent implements OnInit {
 
   constructor(
     public pollsService: PollsService,
-    public route: ActivatedRoute
+    public route: ActivatedRoute,
+    public rt: Router
   ) {}
 
   ngOnInit() {
@@ -32,7 +33,7 @@ export class PollCreateComponent implements OnInit {
         this.pollsService.getPoll(this.pollId).subscribe(pollData => {
           this.isLoading = false;
           this.poll = {
-                       id: pollData._id,
+                       _id: pollData._id,
                        title: pollData.title,
                        address: "",
                        option1: pollData.option1,
@@ -54,7 +55,20 @@ export class PollCreateComponent implements OnInit {
     }
     this.isLoading = true;
     if (this.mode === "create") {
-      this.pollsService.addPoll(form.value.title, form.value.option1, form.value.option2);
+      const poll: Poll = {
+        _id: "",
+        address: "",
+        title: form.value.title,
+        option1: form.value.option1,
+        option2: form.value.option2,
+        value1: 0,
+        value2: 0
+      };
+      this.pollsService.addPoll(poll)
+      .subscribe(responseData => {
+        console.log(responseData);
+        this.rt.navigate(["/"]);
+      });
     } else {
       this.pollsService.updatePoll(
         this.pollId,

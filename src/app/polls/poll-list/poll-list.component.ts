@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, SystemJsNgModuleLoader } from "@angular/core";
 import { Subscription } from 'rxjs';
 
 import { Poll } from "../poll.model";
@@ -9,7 +9,7 @@ import { PollsService } from "../polls.service";
   templateUrl: "./poll-list.component.html",
   styleUrls: ["./poll-list.component.css"]
 })
-export class PollListComponent implements OnInit, OnDestroy {
+export class PollListComponent implements OnInit {
   // polls = [
   //   { title: "First Poll", content: "This is the first poll's content" },
   //   { title: "Second Poll", content: "This is the second poll's content" },
@@ -24,19 +24,20 @@ export class PollListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isLoading = true;
-    this.pollsService.getPolls();
-    this.pollsSub = this.pollsService.getPollUpdateListener()
-      .subscribe((polls: Poll[]) => {
+    this.pollsService.getPolls()
+      .subscribe(data => {
+        console.log(data);
+        this.polls = data.polls;
         this.isLoading = false;
-        this.polls = polls;
       });
+    // this.pollsSub = this.pollsService.getPollUpdateListener()
+    //   .subscribe((polls: Poll[]) => {
+    //     this.isLoading = false;
+    //     this.polls = polls;
+    //   });
   }
 
   onDelete(pollId: string) {
     this.pollsService.deletePoll(pollId);
-  }
-
-  ngOnDestroy() {
-    this.pollsSub.unsubscribe();
   }
 }

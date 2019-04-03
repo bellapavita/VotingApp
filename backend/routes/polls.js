@@ -1,7 +1,7 @@
 const Poll = require("../models/poll");
 module.exports = (app) => {
 
-  app.post("/api/initiateMultichain", (req, res, next) => {
+  app.post("/api/poll/addPoll", (req, res) => {
     let multichain = require("multichain-node")({
       port: 6270,
       host: '68.183.19.8',
@@ -9,34 +9,38 @@ module.exports = (app) => {
       pass: "FF2jPhLCVZiDjr6LZewJp4eA7JJVqcnrsK6PgHvCADG7" //chain1
     });
 
-    let newAddress = {};
-
-    multichain.getNewAddress((err, res) => {
-      if(err){
-          throw err;
-      }
-      console.log(res);
-      newAddress = res;
-    })
-
-    //multichain.issue({address: newAddress, asset: "zcoin", qty: 50000, units: 0.01, details: {hello: "world"}},
-    //  (err, res) => {
-    //    console.log(res)
-    //})
-
-    const poll = new Poll({
-      title: req.body.title,
-      address: newAddress,
-      option1: req.body.option1,
-      option2: req.body.option2,
-      value1: req.body.value1,
-      value2: req.body.value2
-    });
-
-    poll.save().then(createdPoll => {
-      res.status(201).json({
-        message: "Poll added successfully",
-        pollId: createdPoll._id
+    
+    // let newAddress = multichain.getNewAddress((err, res) => {
+    //   if(err){
+    //       throw err;
+    //   }
+    //   //console.log(res);
+    //   newAddress = res;
+    //   console.log("Finish with getting newAddress");
+    // });
+    multichain.getNewAddress().then( newAddress => {
+      
+    
+      //multichain.issue({address: newAddress, asset: "zcoin", qty: 50000, units: 0.01, details: {hello: "world"}},
+      //  (err, res) => {
+      //    console.log(res)
+      //})
+      console.log(newAddress);
+      console.log(typeof(newAddress));
+      const poll = new Poll({
+        title: req.body.title,
+        address: newAddress,
+        option1: req.body.option1,
+        option2: req.body.option2,
+        value1: req.body.value1,
+        value2: req.body.value2
+      });
+      console.log("About to add to MongoDB and res");
+      poll.save().then(createdPoll => {
+        res.status(201).json({
+          message: "Poll added successfully",
+          pollId: createdPoll._id
+        });
       });
     });
   });

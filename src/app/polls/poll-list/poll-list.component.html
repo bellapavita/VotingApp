@@ -27,9 +27,9 @@
     </mat-radio-group>
 
     <mat-action-row>
-      <a mat-button color="primary" [routerLink]="['/vote', poll.id, optionPick]">VOTE</a>
-      <a mat-button color="primary" [routerLink]="['/edit', poll.id]">EDIT</a>
-      <button mat-button color="warn" (click)="onDelete(poll.id)">DELETE</button>
+      <a mat-button color="primary" [routerLink]="['/vote', poll._id, optionPick]">VOTE</a>
+      <a mat-button color="primary" [routerLink]="['/edit', poll._id]">EDIT</a>
+      <button mat-button color="warn" (click)="onDelete(poll._id)">DELETE</button>
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
